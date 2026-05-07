@@ -10,6 +10,9 @@ const btnStart = document.getElementById("start");
 const btnPause = document.getElementById("pause");
 const btnReset = document.getElementById("reset");
 const btnContinue = document.getElementById("continue");
+const longBreakBanner = document.getElementById("longBreakBanner");
+const yesLongBreak = document.getElementById("yesLongBreak");
+const noLongBreak = document.getElementById("noLongBreak");
 
 function updateDisplay() {
     const minutes = Math.floor(timeLeft / 60);
@@ -17,6 +20,28 @@ function updateDisplay() {
     if(timerDisplay) {
         timerDisplay.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
     }
+}
+
+function showLongBreakBanner() {
+
+    longBreakBanner.classList.remove('hidden');
+
+    yesLongBreak.onclick = () => {
+
+        longBreakBanner.classList.add('hidden');
+
+        switchMode('long');
+        startTimer();
+    };
+
+    noLongBreak.onclick = () => {
+
+        longBreakBanner.classList.add('hidden');
+
+        alert("Sesi belajar selesai 👋");
+
+        resetTimer();
+    };
 }
 
 function startTimer() {
@@ -114,15 +139,8 @@ function handleTimerComplete() {
         
         // Cek apakah sudah 4 siklus?
         if (cycleCount >= 4) {
-            let confirmLong = confirm("🔥 4 Sesi Fokus Selesai! Lanjut ke Long Break?");
-            if (confirmLong) {
-                switchMode('long');
-                startTimer(); // Auto-start
-            } else {
-                alert("Sesi Belajar Selesai. Istirahat mandiri ya! 👋");
-                resetTimer(); // Kembali ke awal
-            }
-        } else {
+            showLongBreakBanner();
+        }else {
             // Short break biasa
             switchMode('short');
             startTimer(); // Auto-start
