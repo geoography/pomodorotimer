@@ -34,6 +34,7 @@ input[type="number"] {
 #pause { background-color: #f39c12; color: white; }
 #reset { background-color: #c0392b; color: white; }
 #continue{background-color: #27ae60; color: white;}
+#quit {background-color: #7f8c8d; color: white;}
 button:hover { opacity: 0.9; }
 #status { margin-top: 15px; font-style: italic; color: #bdc3c7; }
 
