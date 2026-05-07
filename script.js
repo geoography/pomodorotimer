@@ -10,6 +10,7 @@ const btnStart = document.getElementById("start");
 const btnPause = document.getElementById("pause");
 const btnReset = document.getElementById("reset");
 const btnContinue = document.getElementById("continue");
+const btnQuit = document.getElementById("quit");
 const longBreakBanner = document.getElementById("longBreakBanner");
 const yesLongBreak = document.getElementById("yesLongBreak");
 const noLongBreak = document.getElementById("noLongBreak");
@@ -218,6 +219,20 @@ function clampInput(inputElement, min, max) {
     inputElement.value = val;
 }
 
+function quitSession() {
+
+    let confirmQuit = confirm("Yakin ingin berhenti belajar?");
+
+    if (confirmQuit) {
+
+        clearInterval(timerID);
+
+        resetTimer();
+
+        alert("Sesi belajar dihentikan 👋");
+    }
+}
+
 const focusInput = document.getElementById("focus_duration");
 const shortInput = document.getElementById("short_duration");
 const longInput = document.getElementById("long_duration");
@@ -236,6 +251,7 @@ if(btnStart) btnStart.addEventListener('click', startTimer);
 if(btnPause) btnPause.addEventListener('click', pauseTimer);
 if(btnContinue) btnContinue.addEventListener('click', continueTimer);
 if(btnReset) btnReset.addEventListener('click', resetTimer);
+if(btnQuit) btnQuit.addEventListener('click', quitSession);
 
 updateDisplay();
 updateButtonVisibility();
