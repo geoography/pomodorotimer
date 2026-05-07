@@ -82,7 +82,6 @@ button:hover { opacity: 0.9; }
     background-color: #c0392b;
     color: white;
 }
-
 @keyframes slideDown{
     from{
         opacity: 0;
