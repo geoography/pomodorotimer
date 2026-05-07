@@ -36,3 +36,61 @@ input[type="number"] {
 #continue{background-color: #27ae60; color: white;}
 button:hover { opacity: 0.9; }
 #status { margin-top: 15px; font-style: italic; color: #bdc3c7; }
+
+/* ===== LONG BREAK NOTIFICATION ===== */
+.banner{
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background-color: #34495e;
+    color: white;
+
+    padding: 15px 20px;
+
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+
+    z-index: 1000;
+
+    animation: slideDown 0.3s ease;
+}
+
+.banner-buttons{
+    display: flex;
+    gap: 10px;
+}
+
+.banner-buttons button{
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+#yesLongBreak{
+    background-color: #27ae60;
+    color: white;
+}
+
+#noLongBreak{
+    background-color: #c0392b;
+    color: white;
+}
+
+@keyframes slideDown{
+    from{
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+
+    to{
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
