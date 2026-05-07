@@ -170,21 +170,34 @@ function updateButtonVisibility() {
 }
 
 function clampInput(inputElement, min, max) {
-    let val = parseInt(inputElement.value);
-    
-    // Jika input bukan angka (NaN), kembalikan ke default min
+   let val = parseFloat(inputElement.value);
+
+    // Jika bukan angka
     if (isNaN(val)) {
         inputElement.value = min;
         return;
     }
 
-    if (val < min) {
+    // Jika kurang dari 1
+    if (val < 1) {
+        alert("Tidak bisa menginput waktu terlalu sedikit, silahkan masukan waktu lebih dari 1 menit.");
         inputElement.value = min;
-    } 
-
-    else if (val > max) {
-        inputElement.value = max;
+        return;
     }
+
+    // Ubah float menjadi integer
+    val = Math.floor(val);
+
+    // Clamp min/max
+    if (val < min) {
+        val = min;
+    }
+
+    if (val > max) {
+        val = max;
+    }
+
+    inputElement.value = val;
 }
 
 const focusInput = document.getElementById("focus_duration");
