@@ -1,26 +1,29 @@
+// history.js
 const fs = require('fs');
 const path = require('path');
 
 const historyFilePath = path.join(__dirname, 'data', 'histori.txt');
-const daysOfWeek = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
 function loadHistoryData() {
+    const emptyMsg = document.getElementById('emptyStateMessage');
+    const ctx = document.getElementById('historyChart').getContext('2d');
+
+    // Reset tampilan
     if (!fs.existsSync(historyFilePath)) {
-        console.log("File histori belum ada.");
-        renderChart([0,0,0,0,0,0,0]);
+        showEmptyState(true);
         return;
     }
 
     const content = fs.readFileSync(historyFilePath, 'utf-8');
     const lines = content.trim().split('\n');
     
-    // Hitung batas waktu 7 hari yang lalu dari sekarang
+    // Hitung batas waktu 7 hari yang lalu
     const now = new Date();
     const sevenDaysAgo = new Date(now);
     sevenDaysAgo.setDate(now.getDate() - 7);
 
-    // Array untuk total menit per hari (Index 0=Minggu, 1=Senin, dst)
     let dailyMinutes = [0, 0, 0, 0, 0, 0, 0];
+    let hasDataInLast7Days = false;
 
     lines.forEach(line => {
         const dateMatch = line.match(/\[(.*?)\]/);
@@ -28,27 +31,48 @@ function loadHistoryData() {
 
         const dateObj = new Date(dateMatch[1]);
         
-        // Diproses jika tanggalnya >= 7 hari yg lalu
+        // Cek apakah data masuk dalam 7 hari terakhir
         if (!isNaN(dateObj.getTime()) && dateObj >= sevenDaysAgo) {
-            const dayIndex = dateObj.getDay(); // 0-6
+            hasDataInLast7Days = true;
+            const dayIndex = dateObj.getDay();
             
             const durationMatch = line.match(/Durasi:\s*(\d+)\s*Menit/);
-            
             if (durationMatch) {
-                const minutes = parseInt(durationMatch[1]);
-                dailyMinutes[dayIndex] += minutes;
+                dailyMinutes[dayIndex] += parseInt(durationMatch[1]);
             }
         }
     });
 
-    console.log("Data 7 Hari Terakhir:", dailyMinutes);
-    renderChart(dailyMinutes);
+    if (!hasDataInLast7Days) {
+        showEmptyState(true);
+    } else {
+        showEmptyState(false);
+        renderChart(dailyMinutes);
+    }
+}
+
+function showEmptyState(show) {
+    const emptyMsg = document.getElementById('emptyStateMessage');
+    const canvas = document.getElementById('historyChart');
+    
+    if (show) {
+        emptyMsg.style.display = 'block';
+        canvas.style.opacity = '0.3'; // Redupkan grafik latar belakang
+    } else {
+        emptyMsg.style.display = 'none';
+        canvas.style.opacity = '1';
+    }
 }
 
 function renderChart(dataValues) {
     const ctx = document.getElementById('historyChart').getContext('2d');
     
-    new Chart(ctx, {
+    // Hancurkan chart lama jika ada agar tidak tumpang tindih saat refresh
+    if (window.myChart) {
+        window.myChart.destroy();
+    }
+
+    window.myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'],

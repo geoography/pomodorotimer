@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histori Fokus</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="history.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <nav class="navbar">
         <div class="navButton"> 
-            <img src="assets/logoPomodoroTimer.png" style="height: 40px; vertical-align: middle;"></img>
+            <img src="assets/logoPomodoroTimer.png" style="height: 40px; vertical-align: middle;" alt="Logo">
             <ul>
                 <li><a href="index.html">Timer</a></li>
                 <li><a href="history.html" class="active">Histori</a></li>
@@ -18,12 +18,18 @@
         </div>
     </nav>
 
-    <div class="container">
-        <div style="width: 90%; max-width: 900px; height: 250px; margin: auto; background-color: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <div class="container" style="text-align: center;">
+        <div class="history-chart-box">
+            <div id="emptyStateMessage" class="empty-state-msg">
+                <h3>Belum ada aktivitas fokus selama 7 hari terakhir </h3>
+                <p>Mulai timer untuk melihat statistik di sini.</p>
+            </div>
             <canvas id="historyChart"></canvas>
         </div>
-        <br>
-        <button onclick="window.location.href='index.html'" style="padding: 10px 10px; cursor: pointer;">Kembali ke Timer ⏱️</button>
+
+        <button class="btn-back-history" onclick="window.location.href='index.html'">
+            Kembali ke Timer
+        </button>
     </div>
 
     <script src="history.js"></script>
