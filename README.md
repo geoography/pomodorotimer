@@ -1,5 +1,5 @@
 Proyek: Alarm Belajar Teknik Pomodoro <br>
-Nama Kelompok: Suara Minoritas
+Nama Kelompok: Suara Minoritas <br>
 <ul>
 <li>Naufal Rasyiq Dziqri Simanjuntak (251401002)</li>
 <li>Naila Azzahra (251401026)</li>
