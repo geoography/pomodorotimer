@@ -1,10 +1,11 @@
 {
   "name": "pomodorotimer",
   "version": "1.0.0",
-  "description": "Proyek: Alarm Belajar Teknik Pomodoro\r Nama Kelompok: Suara Minoritas\r Anggota:\r Naufal Rasyiq Dziqri Simanjuntak (251401002) -> Frontend\r Naila Azzahra (251401026) -> Frontend\r Geofrey Melvern (251401059) -> Backend\r Frans Eikel Martogi (251401134) -> Backend",
+  "description": "Proyek: Alarm Belajar Teknik Pomodoro | Nama Kelompok: Suara Minoritas | Anggota: Naufal Rasyiq Dziqri Simanjuntak (251401002) -> Frontend | Naila Azzahra (251401026) -> Frontend | Geofrey Melvern (251401059) -> Backend | Frans Eikel Martogi (251401134) -> Backend",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "electron-builder --win portable"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,23 @@
   },
   "homepage": "https://github.com/geoography/PomodoroTimer#readme",
   "devDependencies": {
-    "electron": "^42.3.0"
+    "electron": "^42.3.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.suaraminoritas.pomodorotimer",
+    "productName": "PomodoroTimer",
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "assets/logoPomodoroTimer.png"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}.${ext}"
+    }
   }
 }
