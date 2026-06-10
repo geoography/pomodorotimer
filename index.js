@@ -53,7 +53,7 @@ function startTimer() {
 
     isRunning = true;
     updateStatusText();
-    updateButtonVisibility(); 
+    updateButtonVisibility();
     updateDisplay();
 
     timerID = setInterval(() => {
@@ -61,29 +61,34 @@ function startTimer() {
             timeLeft--;
             updateDisplay();
         } else {
+            clearInterval(timerID); 
+            timerID = null;
             handleTimerComplete();
         }
-    }, 1000);
+    }, 1000); 
 }
 
 function pauseTimer() {
     clearInterval(timerID);
+    timerID = null;
     isRunning = false;
     statusDisplay.textContent = "Dijeda ⏸️";
-    updateButtonVisibility(); 
+    updateButtonVisibility();
 }
 
 function continueTimer() {
     if (!isRunning && timeLeft > 0) {
         isRunning = true;
         updateStatusText();
-        updateButtonVisibility(); 
-        
+        updateButtonVisibility();
+
         timerID = setInterval(() => {
             if (timeLeft > 0) {
                 timeLeft--;
                 updateDisplay();
             } else {
+                clearInterval(timerID); 
+                timerID = null;
                 handleTimerComplete();
             }
         }, 1000);
@@ -92,8 +97,9 @@ function continueTimer() {
 
 function resetTimer() {
     clearInterval(timerID);
+    timerID = null;
     isRunning = false;
-    timeLeft = currentTimeMode; 
+    timeLeft = currentTimeMode;
     updateDisplay();
     startTimer();
 }
@@ -109,9 +115,9 @@ function setTimeFromInput() {
     } else if (currentMode === 'long') {
         minutes = document.getElementById("long_duration").value;
     }
-    
+
     // Validasi dasar: jika input kosong/error, pakai default 25
-    timeLeft = (parseInt(minutes) || 25) * 60; 
+    timeLeft = (parseInt(minutes) || 25) * 60;
     currentTimeMode = timeLeft;
 }
 
@@ -122,39 +128,50 @@ function updateStatusText() {
 }
 
 function handleTimerComplete() {
-    clearInterval(timerID);
     isRunning = false;
-    
+
     if (currentMode === 'focus') {
         cycleCount++;
-        
+
         const durationVal = document.getElementById("focus_duration").value;
-        
-        saveFocusHistory(durationVal); 
+        saveFocusHistory(durationVal);
 
         // Cek apakah sudah 4 siklus
         if (cycleCount >= 4) {
-            switchMode('long');
-            startTimer();
-        }else {
+            let confirmRepeat = confirm("Satu sesi pomodoro selesai! Apakah ingin lanjut belajar?");
+
+            if (confirmRepeat) {
+                cycleCount = 0;
+                switchMode('long');
+                startTimer();
+            } else {
+                alert("Sesi belajar dihentikan👋");
+                cycleCount = 0;
+                currentMode = 'focus';
+                timeLeft = 0;
+                updateStatusText();
+                updateDisplay();
+                updateButtonVisibility();
+            }
+        } else {
             // Short break biasa
             switchMode('short');
-            startTimer(); 
+            startTimer();
         }
-    } 
+    }
     else if (currentMode === 'short') {
         switchMode('focus');
-        startTimer(); 
-    } 
+        startTimer();
+    }
     else if (currentMode === 'long') {
-        alert("Long Break Selesai! Satu siklus Pomodoro selsai!");
-        resetTimer(); 
+        switchMode('focus');
+        startTimer();
     }
 }
 
 function switchMode(newMode) {
     currentMode = newMode;
-    timeLeft = 0; // Paksa ambil nilai baru dari input saat start berikutnya
+    timeLeft = 0; 
     updateStatusText();
 }
 
@@ -163,30 +180,30 @@ function updateButtonVisibility() {
 
     if (isRunning) {
         // KONDISI 1: Timer Sedang Jalan
-        btnStart.classList.add('hidden');    
-        btnPause.classList.remove('hidden'); 
-        btnContinue.classList.add('hidden'); 
-        btnQuit.classList.remove('hidden'); 
-        
+        btnStart.classList.add('hidden');
+        btnPause.classList.remove('hidden');
+        btnContinue.classList.add('hidden');
+        btnQuit.classList.remove('hidden');
+
     } else {
         // KONDISI 2: Timer Berhenti (Pause, Reset, atau Belum Mulai)
-        btnPause.classList.add('hidden'); 
-        btnQuit.classList.add('hidden');   
-        
+        btnPause.classList.add('hidden');
+        btnQuit.classList.add('hidden');
+
         if (timeLeft > 0) {
             // KONDISI 2a: Waktu Masih Ada (Artinya baru saja di-Pause)
-            btnStart.classList.add('hidden');    
-            btnContinue.classList.remove('hidden'); 
+            btnStart.classList.add('hidden');
+            btnContinue.classList.remove('hidden');
         } else {
-            // KONDISI 2b: Waktu Habis/Reset (Artisi siap mulai baru)
-            btnStart.classList.remove('hidden'); 
-            btnContinue.classList.add('hidden'); 
+            // KONDISI 2b: Waktu Habis/Reset (Artinya siap mulai baru)
+            btnStart.classList.remove('hidden');
+            btnContinue.classList.add('hidden');
         }
     }
 }
 
 function clampInput(inputElement, min, max) {
-   let val = parseFloat(inputElement.value);
+    let val = parseFloat(inputElement.value);
 
     // Jika bukan angka
     if (isNaN(val)) {
@@ -221,16 +238,17 @@ function quitSession() {
 
     if (confirmQuit) {
         clearInterval(timerID);
+        timerID = null;
         isRunning = false;
-        
-        cycleCount = 0;       
-        currentMode = 'focus'; 
-        timeLeft = 0;          
-        
+
+        cycleCount = 0;
+        currentMode = 'focus';
+        timeLeft = 0;
+
         updateStatusText();
         updateDisplay();
         updateButtonVisibility();
-        
+
         alert("Sesi belajar dihentikan👋");
     }
 }
